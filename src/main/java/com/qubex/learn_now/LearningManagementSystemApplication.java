@@ -1,4 +1,4 @@
-package com.qubex.learning_management_system;
+package com.qubex.learn_now;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

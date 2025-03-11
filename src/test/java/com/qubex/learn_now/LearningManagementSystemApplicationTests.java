@@ -1,4 +1,4 @@
-package com.qubex.learning_management_system;
+package com.qubex.learn_now;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

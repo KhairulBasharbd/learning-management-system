@@ -1,4 +1,4 @@
-package com.qubex.learning_management_system.controller;
+package com.qubex.learn_now.controller;
 
 
 import lombok.RequiredArgsConstructor;
