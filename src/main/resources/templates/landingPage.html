@@ -1,168 +1,332 @@
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
-    <link
-            rel="stylesheet"
-            as="style"
-            onload="this.rel='stylesheet'"
-            href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
-    />
+    <link rel="stylesheet" as="style" onload="this.rel='stylesheet'"
+          href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" />
 
-    <title>Galileo Design</title>
+    <title>LearnNow - Learn from Anywhere</title>
     <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            padding: 150px 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        .btn-primary-custom {
+            background-color: #ff6b6b;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+        }
+
+        .btn-primary-custom:hover {
+            background-color: #ff4757;
+        }
+
+        .btn-secondary-custom {
+            background-color: transparent;
+            border: 2px solid white;
+            padding: 10px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
+        }
+
+        .btn-secondary-custom:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .features-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #2575fc;
+        }
+
+        .testimonials-section {
+            background: #f1f3f5;
+            padding: 80px 0;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: #343a40;
+            color: white;
+            padding: 20px 0;
+        }
+    </style>
+
 </head>
-<body>
-<div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Lexend, "Noto Sans", sans-serif;'>
-    <div class="layout-container flex h-full grow flex-col">
-        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f3f4] px-10 py-3">
-            <div class="flex items-center gap-4 text-[#111517]">
-                <div class="size-4">
-                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z"
-                                fill="currentColor"
-                        ></path>
-                    </svg>
-                </div>
-                <h2 class="text-[#111517] text-lg font-bold leading-tight tracking-[-0.015em]">EduLearn</h2>
+
+<body class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden"
+      style='font-family: Lexend, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+    <!-- Header -->
+    <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f3f4] px-10 py-3">
+        <div class="flex items-center gap-4 text-[#111517]">
+            <h2 class="text-[#111517] text-lg font-bold leading-tight tracking-[-0.015em]">LearnNow</h2>
+        </div>
+        <div class="flex flex-1 justify-end gap-8">
+            <div class="flex items-center gap-9">
+                <a class="text-[#111517] text-sm font-medium leading-normal" href="#"
+                   th:href="@{/}">Courses</a>
+                <a class="text-[#111517] text-sm font-medium leading-normal" href="#" th:href="@{/}">Paths</a>
+                <a class="text-[#111517] text-sm font-medium leading-normal" href="#"
+                   th:href="@{/}">Guides</a>
+                <a class="text-[#111517] text-sm font-medium leading-normal" href="#" th:href="@{/}">For
+                    Business</a>
+                <a class="text-[#111517] text-sm font-medium leading-normal" href="#"
+                   th:href="@{/}">Degrees</a>
             </div>
-            <div class="flex flex-1 justify-end gap-8">
-                <div class="flex items-center gap-9">
-                    <a class="text-[#111517] text-sm font-medium leading-normal" href="#">Courses</a>
-                    <a class="text-[#111517] text-sm font-medium leading-normal" href="#">Paths</a>
-                    <a class="text-[#111517] text-sm font-medium leading-normal" href="#">Guides</a>
-                    <a class="text-[#111517] text-sm font-medium leading-normal" href="#">For Business</a>
-                    <a class="text-[#111517] text-sm font-medium leading-normal" href="#">Degrees</a>
-                </div>
-                <div class="flex gap-2">
-                    <button
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2c99e2] text-white text-sm font-bold leading-normal tracking-[0.015em]"
-                    >
-                        <span class="truncate">Log in</span>
-                    </button>
-                    <button
-                            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f0f3f4] text-[#111517] text-sm font-bold leading-normal tracking-[0.015em]"
-                    >
-                        <span class="truncate">Join for Free</span>
-                    </button>
-                </div>
+            <div class="flex gap-2">
+                <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#2c99e2] text-white text-sm font-bold leading-normal tracking-[0.015em]"
+                        th:onclick="|window.location.href='@{auth/login}'|">
+                    <span class="truncate">Log in</span>
+                </button>
+                <button
+                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#f0f3f4] text-[#111517] text-sm font-bold leading-normal tracking-[0.015em]"
+                        th:onclick="|window.location.href='@{auth/register}'|">
+                    <span class="truncate">Join for Free</span>
+                </button>
             </div>
-        </header>
-        <div class="px-40 flex flex-1 justify-center py-5">
-            <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
-                <div class="@container">
-                    <div class="@[480px]:p-4">
-                        <div
-                                class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
-                                style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://cdn.usegalileo.ai/sdxl10/1c96c8f3-2a7a-4f8a-9796-fff7bea9e337.png");'
-                        >
-                            <div class="flex flex-col gap-2 text-left">
-                                <h1
-                                        class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]"
-                                >
-                                    Learn from anywhere
-                                </h1>
-                                <h2 class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
-                                    Online courses and degrees from world-class universities and companies
-                                </h2>
-                            </div>
-                            <div class="flex-wrap gap-3 flex">
-                                <button
-                                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#2c99e2] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
-                                >
-                                    <span class="truncate">Log in</span>
-                                </button>
-                                <button
-                                        class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#f0f3f4] text-[#111517] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
-                                >
-                                    <span class="truncate">Join for Free</span>
-                                </button>
-                            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="px-40 flex flex-1 justify-center py-5">
+        <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="@container">
+                <div class="@[480px]:p-4">
+                    <div class="flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10"
+                         style='background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.4) 100%), url("/img/2_landingpageimage.webp");'>
+                        <div class="flex flex-col gap-2 text-left">
+                            <h1
+                                    class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                                Learn from anywhere
+                            </h1>
+                            <h2
+                                    class="text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal">
+                                Online courses and degrees from world-class universities and companies
+                            </h2>
+                        </div>
+                        <div class="flex-wrap gap-3 flex">
+                            <button
+                                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#2c99e2] text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                                    th:onclick="|window.location.href='@{auth/login}'|">
+                                <span class="truncate">Log in</span>
+                            </button>
+                            <button
+                                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#f0f3f4] text-[#111517] text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em]"
+                                    th:onclick="|window.location.href='@{auth/register}'|">
+                                <span class="truncate">Join for Free</span>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-col gap-10 px-4 py-10 @container">
+            </div>
+
+
+
+
+            <!-- Why choose us section -->
+            <div class="flex flex-col gap-10 px-4 py-10 @container">
+                <h1
+                        class="text-[#111517] tracking-light text-[32px] font-bold leading-tight @[480px]:text-4xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] max-w-[720px]">
+                    Featured Courses
+                </h1>
+            </div>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/1_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">Harvard University</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">CS50's Computer Science for
+                            Business Professionals</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Harvard University</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/2_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">Stanford University</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Machine Learning</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Stanford University</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/3_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">Google</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Data Analytics and Machine
+                            Learning with Python</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Google</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/4_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">Amazon</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">AWS Fundamentals: Going
+                            Cloud-Native</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Amazon</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/5_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">IBM</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Data Science</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">IBM</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 pb-3">
+                    <div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
+                         style='background-image: url("/img/6_course.png");'>
+                    </div>
+                    <div>
+                        <p class="text-[#111517] text-base font-medium leading-normal">Microsoft</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Azure Fundamentals</p>
+                        <p class="text-[#647987] text-sm font-normal leading-normal">Microsoft</p>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <div class="container text-center">
                     <h1
-                            class="text-[#111517] tracking-light text-[32px] font-bold leading-tight @[480px]:text-4xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em] max-w-[720px]"
-                    >
+                            class="text-black text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
                         Why Choose Us?
                     </h1>
-                </div>
-                <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/71bf134e-6824-4575-b1e1-f319a3f44f98.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">Harvard University</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">CS50's Computer Science for Business Professionals</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Harvard University</p>
+                    <!-- <h2 th:text="#{landing.features.title}"></h2> -->
+                    <div class="row mt-5">
+                        <div class="col-md-4">
+                            <div class="feature-icon">📚</div>
+                            <h2 ><b>Wide Range of Courses</b></h2>
+                            <p >Explore various subjects from top
+                                instructors and industry experts.</p>
                         </div>
-                    </div>
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/c182f49a-c81d-4d94-9373-a2f08b30aae5.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">Stanford University</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Machine Learning</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Stanford University</p>
+                        <div class="col-md-4">
+                            <div class="feature-icon">🏆</div>
+                            <h2 ><b>Certified Learning</b></h2>
+                            <p >Earn certificates and advance
+                                your career with recognized credentials.</p>
                         </div>
-                    </div>
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/4d71fb69-e836-4f83-a70f-1816c3598cee.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">Google</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Data Analytics and Machine Learning with Python</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Google</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/557be0f8-e3a6-4b61-bf6e-b9242f1059b7.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">Amazon</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">AWS Fundamentals: Going Cloud-Native</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Amazon</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/c4de562e-9e7b-4248-b22f-a426d639fabf.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">IBM</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Data Science</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">IBM</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-3 pb-3">
-                        <div
-                                class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-xl"
-                                style='background-image: url("https://cdn.usegalileo.ai/sdxl10/21615b3e-bd14-4999-8879-27e28dc3ab51.png");'
-                        ></div>
-                        <div>
-                            <p class="text-[#111517] text-base font-medium leading-normal">Microsoft</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Azure Fundamentals</p>
-                            <p class="text-[#647987] text-sm font-normal leading-normal">Microsoft</p>
+                        <div class="col-md-4">
+                            <div class="feature-icon">📱</div>
+                            <h2 ><b>Learn on Any Device</b></h2>
+                            <p >Access courses seamlessly on mobile,
+                                tablet, or desktop.</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Testimonials Section -->
+            <section class="testimonials-section">
+
+                <h1
+                        class="text-black text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                    What Our Learners Say
+                </h1>
+                <div class="container">
+
+                    <!-- <h2 class="text-center mb-5" th:text="#{landing.testimonials.title}">What Our Learners Say</h2> -->
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="testimonial-card">
+                                <p >"This LMS has transformed my learning
+                                    experience. The courses are well-structured and easy to follow."</p>
+                                <p class="text-muted" >- John Doe</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="testimonial-card">
+                                <p >"I love the flexibility of learning at
+                                    my own pace. Highly recommended!"</p>
+                                <p class="text-muted">- Jane Smith</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="testimonial-card">
+                                <p >"The certifications helped me land my
+                                    dream job. Thank you!"</p>
+                                <p class="text-muted" >- Alex Johnson</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Footer -->
+            <footer class="footer text-center">
+                <div class="container">
+                    <p>© 2025 Learn Now | <a href="#" class="text-light">Privacy Policy</a> | <a href="#"
+                                                                                           class="text-light">Contact Us</a></p>
+                </div>
+            </footer>
         </div>
     </div>
 </div>
 </body>
+
 </html>
