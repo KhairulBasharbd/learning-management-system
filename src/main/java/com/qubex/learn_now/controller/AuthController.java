@@ -1,6 +1,7 @@
-package com.qubex.learning_management_system.controller;
+package com.qubex.learn_now.controller;
 
 
+import com.qubex.learn_now.dto.request.UserRegistrationRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +15,16 @@ public class AuthController {
 
     @GetMapping("/register")
     public String getRegisterPage(Model model) {
+        model.addAttribute("userRegistrationRequestDTO", new UserRegistrationRequestDTO());
 
         return "auth/register";
     }
 
+
     @GetMapping("/login")
-    public String getLoginPage(){
-
+    public String login(Model model) {
+        //if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
         return "auth/login";
-
     }
 
 
