@@ -14,7 +14,7 @@
             const fullName = document.getElementById("fullName").value.trim();
             const email = document.getElementById("email").value.trim();
             const password = document.getElementById("password").value.trim();
-            const userType = document.querySelector('input[name="userType"]:checked');
+            const role = document.querySelector('input[name="role"]:checked');
             const agreeTerms = document.getElementById("agreeTerms").checked;
 
             if (!fullName) {
@@ -29,7 +29,7 @@
                 alert("Password is required.");
                 return false;
             }
-            if (!userType) {
+            if (!role) {
                 alert("Please select a user type (Student or Instructor).");
                 return false;
             }
@@ -46,20 +46,26 @@
 <div class="layout-container flex h-full grow flex-col">
     <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#F0F2F5] px-10 py-3">
         <div class="flex items-center gap-4 text-[#141414]">
-            <h2 class="text-[#141414] text-lg font-bold leading-tight tracking-[-0.015em]">LearnNow</h2>
+            <a th:href="@{/}">
+                <h2 class="text-[#141414] text-lg font-bold leading-tight tracking-[-0.015em]">LearnNow</h2>
+            </a>
         </div>
-        <button
-                class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#F0F2F5] text-[#141414] text-sm font-bold leading-normal tracking-[0.015em]">
-            <span class="truncate">Sign in</span>
-        </button>
+        <a th:href="@{/auth/login}">
+            <button
+                    class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-[#F0F2F5] text-[#141414] text-sm font-bold leading-normal tracking-[0.015em]">
+                <span class="truncate">Sign in</span>
+            </button>
+        </a>
     </header>
+
+
     <div class="px-40 flex flex-1 justify-center py-5">
         <!-- Card Container -->
         <div class="bg-[#FFFFFF] rounded-xl shadow-lg p-8 w-[512px] max-w-[512px]">
             <div class="flex flex-wrap justify-between gap-3 p-4">
                 <p class="text-[#141414] tracking-light text-[32px] font-bold leading-tight min-w-72">Create an account</p>
             </div>
-            <form th:action="@{auth/register}" th:object="${registrationFormDTO}" method="POST" onsubmit="return validateForm()">
+            <form th:action="@{auth/register}" th:object="${userRegistrationRequestDTO}" method="POST" onsubmit="return validateForm()">
                 <!-- Full Name Field -->
                 <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                     <label class="flex flex-col min-w-40 flex-1">
@@ -120,9 +126,9 @@
                         Student
                         <input
                                 type="radio"
-                                th:field="*{userType}"
-                                name="userType"
-                                value="student"
+                                th:field="*{role}"
+                                name="role"
+                                value="ROLE_STUDENT"
                                 class="invisible absolute"
                                 required
                         />
@@ -133,9 +139,9 @@
                         Instructor
                         <input
                                 type="radio"
-                                th:field="*{userType}"
-                                name="userType"
-                                value="instructor"
+                                th:field="*{role}"
+                                name="role"
+                                value="ROLE_INSTRUCTOR"
                                 class="invisible absolute"
                                 required
                         />
@@ -147,7 +153,7 @@
                     <label class="flex gap-x-3 py-3 flex-row">
                         <input
                                 id="agreeTerms"
-                                th:field="*{agreeTerms}"
+
                                 name="agreeTerms"
                                 type="checkbox"
                                 class="h-5 w-5 rounded border-[#DBE1E6] border-2 bg-transparent text-[#359EFF] checked:bg-[#359EFF] checked:border-[#359EFF] checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:border-[#DBE1E6] focus:outline-none"
