@@ -1,10 +1,7 @@
 package com.qubex.learn_now.dto.request;
 
 import com.qubex.learn_now.enums.Role;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,7 +24,7 @@ public class UserRegistrationRequestDTO {
 //    )
     private String password;
 
-    @NotEmpty(message = "Role can not be empty")
+    @NotNull(message = "Role can not be empty")
     private Role role;
 
 
