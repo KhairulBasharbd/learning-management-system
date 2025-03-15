@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin=""/>
     <link rel="stylesheet" as="style" onload="this.rel='stylesheet'"
-          href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900" />
+          href="https://fonts.googleapis.com/css2?display=swap&amp;family=Lexend%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"/>
 
     <title>Register - LearnNow</title>
-    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,"/>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
@@ -63,9 +63,32 @@
         <!-- Card Container -->
         <div class="bg-[#FFFFFF] rounded-xl shadow-lg p-8 w-[512px] max-w-[512px]">
             <div class="flex flex-wrap justify-between gap-3 p-4">
-                <p class="text-[#141414] tracking-light text-[32px] font-bold leading-tight min-w-72">Create an account</p>
+                <p class="text-[#141414] tracking-light text-[32px] font-bold leading-tight min-w-72">Create an
+                    account</p>
             </div>
-            <form th:action="@{auth/register}" th:object="${userRegistrationRequestDTO}" method="POST" onsubmit="return validateForm()">
+            <form th:action="@{/auth/register}" th:object="${userRegistrationRequestDTO}" method="POST"
+                  onsubmit="return validateForm()">
+
+
+
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+
+                <!-- Service layer Errors (Global Errors) -->
+                <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <p th:text="${errorMessage}"></p>
+                </div>
+
+
+                <!-- Validation Errors (Server-Side) -->
+                <div th:if="${validationErrors}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                    <ul>
+                        <li th:each="error : ${validationErrors}" th:text="${error}"></li>
+                    </ul>
+                </div>
+
+
+
                 <!-- Full Name Field -->
                 <div class="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
                     <label class="flex flex-col min-w-40 flex-1">
@@ -159,7 +182,8 @@
                                 class="h-5 w-5 rounded border-[#DBE1E6] border-2 bg-transparent text-[#359EFF] checked:bg-[#359EFF] checked:border-[#359EFF] checked:bg-[image:--checkbox-tick-svg] focus:ring-0 focus:ring-offset-0 focus:border-[#DBE1E6] focus:outline-none"
                                 required
                         />
-                        <p class="text-[#141414] text-base font-normal leading-normal">I agree to the Terms of Service and Privacy Policy.</p>
+                        <p class="text-[#141414] text-base font-normal leading-normal">I agree to the Terms of Service
+                            and Privacy Policy.</p>
                     </label>
                 </div>
 
