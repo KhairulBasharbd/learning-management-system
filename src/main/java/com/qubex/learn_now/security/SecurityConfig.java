@@ -1,5 +1,6 @@
 package com.qubex.learn_now.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,12 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,15 +30,21 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .formLogin(login -> login
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
-                        .permitAll()
+                .formLogin(form -> form
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login")
+                        .successHandler(customAuthenticationSuccessHandler) // Use custom handler
+                        .failureUrl("/auth/login?error=true")  // Redirect back to login on failure
+
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/login")  // Redirect to login page after logout
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                )
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())  // Use cookie-based CSRF token repository
                 );
 
         return http.build();
