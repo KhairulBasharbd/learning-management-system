@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<!-- Navbar -->
+<nav class="bg-green-600 text-white p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold">Instructor Dashboard</h1>
+    <div class="flex items-center space-x-4">
+        <span>Jane Doe</span>
+        <a href="/auth/login" class="bg-red-500 px-4 py-2 rounded">Logout</a>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="flex">
+    <aside class="w-64 bg-white h-screen p-4">
+        <ul class="space-y-2">
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">My Courses</a></li>
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">Create Course</a></li>
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">Assignments</a></li>
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">Quizzes</a></li>
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">Discussion Forum</a></li>
+            <li><a href="#" class="block py-2 px-4 hover:bg-green-100 rounded">Grades</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <h2 class="text-2xl font-bold mb-6">My Courses</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Course Cards -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold">Course Title 1</h3>
+                <p class="text-gray-600 mt-2">Description of the course.</p>
+                <a href="#" class="mt-4 inline-block bg-green-500 text-white px-4 py-2 rounded">Manage Course</a>
+            </div>
+            <!-- Repeat for other courses -->
+        </div>
+    </main>
+</div>
+</body>
+</html>
