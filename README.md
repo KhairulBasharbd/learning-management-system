@@ -1,6 +1,6 @@
 # Learning Management System (LMS)
 
-![LMS Banner](https://via.placeholder.com/800x200.png?text=LMS+Banner)
+![LMS Banner](Docs/image/lms.webp)
 
 A web-based platform designed to facilitate online education and training. The LMS allows students to enroll in courses, access materials, submit assignments, and track progress, while instructors can create and manage courses, and administrators oversee the system.
 
