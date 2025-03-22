@@ -2,6 +2,7 @@ package com.qubex.learn_now.model;
 
 
 import com.qubex.learn_now.enums.EmailVerified;
+import com.qubex.learn_now.enums.Gender;
 import com.qubex.learn_now.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,13 +10,14 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-//@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class User {
     @Id
@@ -33,6 +35,12 @@ public class User {
 
     @Column
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Column(nullable = true)
+    private LocalDate dateOfBirth;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
