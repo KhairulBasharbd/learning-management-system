@@ -62,9 +62,6 @@ public class AuthController {
 
 
 
-
-
-
     @GetMapping("/login")
     public String login(Model model) {
         //if(AuthUtil.isAuthenticated()) return "redirect:/user/dashboard";
