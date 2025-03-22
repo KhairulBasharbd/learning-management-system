@@ -47,7 +47,7 @@ public class SecurityConfig {
                         .key(rememberMeKey)
                         .rememberMeParameter("remember-me")
                         .tokenValiditySeconds(rememberMeTokenValidityInSeconds)
-                        .rememberMeCookieName("rider-remember-me")
+                        .rememberMeCookieName("remember-me")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
