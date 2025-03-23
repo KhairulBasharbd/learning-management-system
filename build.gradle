@@ -28,7 +28,13 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Spring Boot Starter for Thymeleaf
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// Thymeleaf Layout Dialect
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
+
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
