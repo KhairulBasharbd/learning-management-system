@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/instructor-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Dashboard</title>
+
+</head>
+<body>
+<!-- Main Content Fragment -->
+<main class="flex-1 p-8" layout:fragment="instructor-content">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">My Courses</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Course Card 1 -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="text-xl font-semibold text-gray-800">Course Title 1</h3>
+            <p class="text-gray-600 mt-2">Description of the course. This course covers the basics of web development.</p>
+            <div class="mt-4 flex space-x-2">
+                <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                    <i class="fas fa-cog mr-2"></i> Manage Course
+                </a>
+                <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-eye mr-2"></i> View
+                </a>
+            </div>
+        </div>
+
+        <!-- Course Card 2 -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="text-xl font-semibold text-gray-800">Course Title 2</h3>
+            <p class="text-gray-600 mt-2">Description of the course. This course covers advanced topics in web development.</p>
+            <div class="mt-4 flex space-x-2">
+                <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                    <i class="fas fa-cog mr-2"></i> Manage Course
+                </a>
+                <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-eye mr-2"></i> View
+                </a>
+            </div>
+        </div>
+
+        <!-- Course Card 3 -->
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h3 class="text-xl font-semibold text-gray-800">Course Title 3</h3>
+            <p class="text-gray-600 mt-2">Description of the course. This course covers mobile app development.</p>
+            <div class="mt-4 flex space-x-2">
+                <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300">
+                    <i class="fas fa-cog mr-2"></i> Manage Course
+                </a>
+                <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-eye mr-2"></i> View
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
