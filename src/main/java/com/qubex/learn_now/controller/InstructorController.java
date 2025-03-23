@@ -14,7 +14,7 @@ public class InstructorController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        return "dashboard/instructorDashboard";
+        return "dashboard-content";
     }
 
 
