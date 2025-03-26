@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/instructor-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Course</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom width for the form container */
+        .form-container {
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans" layout:fragment="instructor-content">
+<!-- Main container with adjusted padding -->
+<div class="form-container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Form card with full width -->
+    <div class="bg-white shadow-md rounded-lg p-6 md:p-8">
+        <h1 class="text-2xl font-bold mb-6">Create a New Course</h1>
+        <form th:action="@{/instructor/courses}" th:object="${course}" method="post" enctype="multipart/form-data">
+
+            <!-- 2-column layout for some fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Course Title -->
+                <div class="col-span-2">
+                    <label class="block text-gray-700 font-medium mb-2" for="title">Course Title</label>
+                    <input th:field="*{title}" type="text" id="title" name="title"
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Enter course title" required>
+                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Description (full width) -->
+                <div class="col-span-2">
+                    <label class="block text-gray-700 font-medium mb-2" for="description">Description</label>
+                    <textarea th:field="*{description}" id="description" name="description"
+                              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              rows="5" placeholder="Describe your course" required></textarea>
+                    <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-red-500 text-sm"></span>
+                </div>
+
+                <!-- Left Column -->
+                <div>
+                    <!-- Category -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="category">Category</label>
+                        <select th:field="*{categoryId}" id="category" name="categoryId"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Select a category</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                        <span th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <!-- Level -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2">Level</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center"><input th:field="*{level}" type="radio" value="BEGINNER" class="mr-2"> Beginner</label>
+                            <label class="flex items-center"><input th:field="*{level}" type="radio" value="INTERMEDIATE" class="mr-2"> Intermediate</label>
+                            <label class="flex items-center"><input th:field="*{level}" type="radio" value="ADVANCED" class="mr-2"> Advanced</label>
+                        </div>
+                        <span th:if="${#fields.hasErrors('level')}" th:errors="*{level}" class="text-red-500 text-sm"></span>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Price -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="price">Price (USD)</label>
+                        <input th:field="*{price}" type="number" id="price" name="price" step="0.01" min="0"
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="0.00">
+                        <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-red-500 text-sm"></span>
+                    </div>
+
+                    <!-- Visibility -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="visibility">Visibility</label>
+                        <select th:field="*{visibility}" id="visibility" name="visibility"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                            <option value="PUBLIC">Public</option>
+                            <option value="PRIVATE">Private</option>
+                            <option value="DRAFT">Draft</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Full width elements -->
+                <div class="col-span-2">
+                    <!-- Thumbnail -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="thumbnail">Thumbnail Image</label>
+                        <input type="file" id="thumbnail" name="thumbnail"
+                               class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" accept="image/*">
+                    </div>
+
+                    <!-- Syllabus -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="syllabus">Syllabus (PDF)</label>
+                        <input type="file" id="syllabus" name="syllabus"
+                               class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" accept=".pdf">
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="tags">Tags (comma-separated)</label>
+                        <input th:field="*{tags}" type="text" id="tags" name="tags"
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="e.g., programming, java, beginner">
+                    </div>
+
+                    <!-- Duration -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="duration">Duration</label>
+                        <input th:field="*{duration}" type="text" id="duration" name="duration"
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               placeholder="e.g., 4 weeks or 10 hours">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="mt-8">
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium transition duration-200">
+                    Create Course
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
