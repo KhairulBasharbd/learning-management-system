@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 public class CourseCreationRequestDTO {
@@ -20,7 +21,7 @@ public class CourseCreationRequestDTO {
     private String description;
 
     @NotNull(message = "Category is required")
-    private Long categoryId;
+    private UUID categoryId;
 
     @NotNull(message = "Level is required")
     private String level;
@@ -28,8 +29,8 @@ public class CourseCreationRequestDTO {
     @DecimalMin(value = "0.0", inclusive = true, message = "Price must be non-negative")
     private BigDecimal price;
 
-    private MultipartFile thumbnail;
-    private MultipartFile syllabus;
+//    private MultipartFile thumbnail;
+//    private MultipartFile syllabus;
 
     @NotNull(message = "Visibility is required")
     private String visibility;
