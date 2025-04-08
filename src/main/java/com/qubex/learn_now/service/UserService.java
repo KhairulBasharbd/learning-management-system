@@ -2,7 +2,6 @@ package com.qubex.learn_now.service;
 
 import com.qubex.learn_now.dto.request.UserRegistrationRequestDTO;
 import com.qubex.learn_now.exception.custom.AlreadyExistsException;
-import com.qubex.learn_now.mapper.UserRegistrationMapper;
 import com.qubex.learn_now.model.Instructor;
 import com.qubex.learn_now.model.Student;
 import com.qubex.learn_now.model.User;
