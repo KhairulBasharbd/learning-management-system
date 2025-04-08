@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/instructor-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Content</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans" layout:fragment="instructor-content">
+<div class="container mx-auto px-4 py-8">
+    <!-- Course Info Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h1 class="text-2xl font-bold mb-2" th:text="${course.title}">Course Title</h1>
+        <p class="text-gray-600 mb-4" th:text="${course.description}">Course description...</p>
+        <div class="flex items-center text-sm text-gray-500">
+            <span class="mr-4" th:text="'Level: ' + ${course.level}">Level: Beginner</span>
+            <span th:text="'Visibility: ' + ${course.visibility}">Visibility: Draft</span>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <p th:text="${success}"></p>
+    </div>
+
+    <!-- Course Content Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-xl font-bold">Course Content</h2>
+            <button id="addSectionBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Add Section
+            </button>
+        </div>
+
+        <!-- Add Section Form (Hidden by default) -->
+        <div id="addSectionForm" class="hidden bg-gray-100 p-4 rounded-lg mb-6">
+            <h3 class="text-lg font-semibold mb-4">Add New Section</h3>
+            <form th:action="@{'/instructor/courses/' + ${course.id} + '/sections'}" th:object="${newSection}"
+                  method="post">
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2" for="sectionTitle">Section Title</label>
+                    <input th:field="*{title}" type="text" id="sectionTitle"
+                           class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Enter section title" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-medium mb-2" for="sectionDesc">Description (Optional)</label>
+                    <textarea th:field="*{description}" id="sectionDesc"
+                              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              rows="3" placeholder="Enter section description"></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="cancelSectionBtn"
+                            class="mr-2 bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        Save Section
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sections List -->
+        <div th:if="${sections.empty}" class="text-center py-8 text-gray-500">
+            No sections added yet. Add your first section to get started.
+        </div>
+
+        <div th:unless="${sections.empty}" class="space-y-6">
+            <!-- Section Item -->
+            <div th:each="section : ${sections}" class="border rounded-lg">
+                <!-- Section Header -->
+                <div class="flex justify-between items-center bg-gray-100 p-4 rounded-t-lg">
+                    <div>
+                        <h3 class="font-semibold" th:text="${section.title}">Section 1: Introduction</h3>
+                        <p class="text-sm text-gray-600" th:if="${section.description}"
+                           th:text="${section.description}">
+                            Brief description of this section
+                        </p>
+                    </div>
+                    <div>
+                        <button th:attr="data-section-id=${section.id}"
+                                class="addLectureBtn bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                            Add Lecture
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add Lecture Form (Hidden by default) -->
+                <div th:attr="id='addLectureForm-' + ${section.id}" class="hidden bg-gray-50 p-4">
+                    <h4 class="text-md font-semibold mb-3">Add New Lecture</h4>
+                    <form th:action="@{'/instructor/courses/sections/' + ${section.id} + '/lectures'}"
+                          th:object="${newLecture}" method="post">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2" for="lectureTitle">Title</label>
+                                <input th:field="*{title}" type="text" id="lectureTitle"
+                                       class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="Enter lecture title" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2" for="lectureType">Type</label>
+                                <select th:field="*{type}" id="lectureType"
+                                        class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="VIDEO">Video</option>
+                                    <option value="PDF">PDF</option>
+                                    <option value="TEXT">Text</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-medium mb-2" for="lectureContent">Content URL</label>
+                            <input th:field="*{content}" type="text" id="lectureContent"
+                                   class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="Enter video URL or PDF URL" required>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-medium mb-2" for="lectureDesc">Description
+                                (Optional)</label>
+                            <textarea th:field="*{description}" id="lectureDesc"
+                                      class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      rows="2" placeholder="Enter lecture description"></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" th:attr="data-section-id=${section.id}"
+                                    class="cancelLectureBtn mr-2 bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">
+                                Save Lecture
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Lectures List -->
+                <div class="p-4">
+                    <div th:if="${section.lectures.isEmpty()}" class="text-center py-4 text-gray-500 text-sm">
+                        No lectures in this section yet.
+                    </div>
+                    <ul th:unless="${section.lectures.isEmpty()}" class="space-y-2">
+                        <!-- Lecture Item -->
+                        <li th:each="lecture : ${section.lectures}"
+                            class="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
+                            <div class="flex items-center">
+                                <!-- Icon based on lecture type -->
+                                <div class="mr-3">
+                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).VIDEO}"
+                                          class="material-icons text-blue-600">play_circle</span>
+                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).PDF}"
+                                          class="material-icons text-red-600">picture_as_pdf</span>
+                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).TEXT}"
+                                          class="material-icons text-green-600">article</span>
+                                </div>
+                                <div>
+                                    <h5 class="font-medium" th:text="${lecture.title}">Lecture Title</h5>
+                                    <p class="text-xs text-gray-500" th:if="${lecture.description}"
+                                       th:text="${lecture.description}">
+                                        Brief description of this lecture
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="text-gray-500 text-sm" th:text="${lecture.type}">VIDEO</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<!-- JavaScript for Toggle Forms -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Toggle Section Form
+        const addSectionBtn = document.getElementById('addSectionBtn');
+        const addSectionForm = document.getElementById('addSectionForm');
+        const cancelSectionBtn = document.getElementById('cancelSectionBtn');
+
+        addSectionBtn.addEventListener('click', function () {
+            addSectionForm.classList.remove('hidden');
+            addSectionBtn.classList.add('hidden');
+        });
+
+        cancelSectionBtn.addEventListener('click', function () {
+            addSectionForm.classList.add('hidden');
+            addSectionBtn.classList.remove('hidden');
+        });
+
+        // Toggle Lecture Forms
+        const addLectureBtns = document.querySelectorAll('.addLectureBtn');
+        const cancelLectureBtns = document.querySelectorAll('.cancelLectureBtn');
+
+        addLectureBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const sectionId = this.getAttribute('data-section-id');
+                const lectureForm = document.getElementById('addLectureForm-' + sectionId);
+                lectureForm.classList.remove('hidden');
+                this.classList.add('hidden');
+            });
+        });
+
+        cancelLectureBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const sectionId = this.getAttribute('data-section-id');
+                const lectureForm = document.getElementById('addLectureForm-' + sectionId);
+                const addLectureBtn = btn.closest('.border').querySelector('.addLectureBtn');
+
+                lectureForm.classList.add('hidden');
+                addLectureBtn.classList.remove('hidden');
+            });
+        });
+    });
+</script>
+</body>
+</html>
