@@ -12,4 +12,5 @@ public interface InstructorRepository extends JpaRepository<Instructor, UUID> {
 
     Optional<Instructor> findByEmail(String email);
 
+
 }
