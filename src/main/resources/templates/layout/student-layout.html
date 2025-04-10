@@ -1,0 +1,33 @@
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--    <title>Instructor Dashboard</title>-->
+    <title layout:title-pattern="$CONTENT_TITLE - Learn Now"> Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Add FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<!-- Include Navbar Fragment -->
+<div th:replace="~{fragments/student/navbar :: navbar}"></div>
+
+<!-- Sidebar and Main Content -->
+<div class="flex">
+
+    <!-- Include Sidebar Fragment -->
+
+    <div th:replace="~{fragments/student/sidebar :: sidebar}"></div>
+
+    <!-- Include Main Content Fragment -->
+    <div layout:fragment="student-content">
+        <p>Default content goes here if not overridden.</p>
+    </div>
+</div>
+</body>
+</html>
