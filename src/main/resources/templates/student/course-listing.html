@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Courses</title>
+</head>
+<body>
+<!-- Main Content Fragment -->
+<main class="flex-1 p-8" layout:fragment="student-content">
+
+    <!-- Error/Success Messages -->
+    <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <div th:if="${validationErrors}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <ul>
+            <li th:each="error : ${validationErrors}" th:text="${error}"></li>
+        </ul>
+    </div>
+    <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <p th:text="${success}"></p>
+    </div>
+
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">Explore Courses</h1>
+        <p class="text-gray-600 mt-2">Find the perfect course to enhance your skills</p>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <form th:action="@{/student/courses}" method="get" th:object="${searchDTO}">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Keyword Search -->
+                <div>
+                    <label for="keyword" class="block text-sm font-medium text-gray-700 mb-1">Search Keyword</label>
+                    <input type="text" id="keyword" name="keyword" th:value="${searchDTO.keyword}"
+                           class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           placeholder="Search for courses...">
+                </div>
+
+                <!-- Category Filter -->
+                <div>
+                    <label for="categoryId" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select id="categoryId" name="categoryId" th:value="${searchDTO.categoryId}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Categories</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${category.id == searchDTO.categoryId}">
+                            Category Name
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Level Filter -->
+                <div>
+                    <label for="level" class="block text-sm font-medium text-gray-700 mb-1">Level</label>
+                    <select id="level" name="level" th:value="${searchDTO.level}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Levels</option>
+                        <option value="BEGINNER" th:selected="${searchDTO.level == 'BEGINNER'}">Beginner</option>
+                        <option value="INTERMEDIATE" th:selected="${searchDTO.level == 'INTERMEDIATE'}">Intermediate</option>
+                        <option value="ADVANCED" th:selected="${searchDTO.level == 'ADVANCED'}">Advanced</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+                <!-- Price Range -->
+                <div>
+                    <label for="maxPrice" class="block text-sm font-medium text-gray-700 mb-1">Max Price</label>
+                    <input type="range" id="maxPrice" name="maxPrice" min="0" max="1000" step="10"
+                           th:value="${searchDTO.maxPrice != null ? searchDTO.maxPrice : 1000}"
+                           class="w-full">
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>$0</span>
+                        <span id="priceDisplay">$<span th:text="${searchDTO.maxPrice != null ? searchDTO.maxPrice : 1000}">1000</span></span>
+                        <span>$1000</span>
+                    </div>
+                </div>
+
+                <!-- Sort By -->
+                <div>
+                    <label for="sortBy" class="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+                    <select id="sortBy" name="sortBy" th:value="${searchDTO.sortBy}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="title" th:selected="${searchDTO.sortBy == 'title'}">Title</option>
+                        <option value="price" th:selected="${searchDTO.sortBy == 'price'}">Price</option>
+                        <option value="level" th:selected="${searchDTO.sortBy == 'level'}">Level</option>
+                        <option value="createdAt" th:selected="${searchDTO.sortBy == 'createdAt'}">Newest</option>
+                    </select>
+                </div>
+
+                <!-- Sort Direction -->
+                <div>
+                    <label for="sortDirection" class="block text-sm font-medium text-gray-700 mb-1">Sort Direction</label>
+                    <select id="sortDirection" name="sortDirection" th:value="${searchDTO.sortDirection}"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="ASC" th:selected="${searchDTO.sortDirection == 'ASC'}">Ascending</option>
+                        <option value="DESC" th:selected="${searchDTO.sortDirection == 'DESC'}">Descending</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300">
+                    Search Courses
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Course Listings -->
+    <div>
+        <!-- If no courses found -->
+        <div th:if="${#lists.isEmpty(courses)}" class="bg-white rounded-lg shadow-sm p-8 text-center">
+            <div class="max-w-md mx-auto">
+                <div class="text-blue-500 mb-4">
+                    <i class="fas fa-book-open fa-4x opacity-50"></i>
+                </div>
+                <h3 class="text-2xl font-medium text-gray-800 mb-2">No Courses Found</h3>
+                <p class="text-gray-600 mb-6">Try adjusting your search criteria to find what you're looking for.</p>
+                <a th:href="@{/student/courses}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-300">
+                    <i class="fas fa-undo mr-2"></i> Reset Filters
+                </a>
+            </div>
+        </div>
+
+        <!-- Course grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" th:if="${not #lists.isEmpty(courses)}">
+            <!-- Course Card -->
+            <div th:each="course : ${courses}" class="bg-white rounded-lg shadow-md hover:shadow-lg transition duration-300">
+                <div class="relative">
+                    <img th:src="${course.thumbnailUrl != null ? course.thumbnailUrl : '/images/default-course.jpg'}"
+                         alt="Course thumbnail"
+                         class="w-full h-40 object-cover rounded-t-lg">
+                    <div class="absolute bottom-0 left-0 bg-blue-600 text-white px-3 py-1 rounded-tr-md" th:text="${course.level}">
+                        BEGINNER
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2" th:text="${course.title}">Course Title</h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2" th:text="${course.description}">
+                        Course description goes here...
+                    </p>
+                    <div class="flex items-center text-sm text-gray-500 mb-4">
+                        <i class="fas fa-clock mr-1"></i>
+                        <span th:text="${course.duration}">8 hours</span>
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-book mr-1"></i>
+                        <span th:text="${course.lessonCount}">12</span> lessons
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-gray-800" th:text="${'$' + course.price}">$29.99</span>
+                        <div th:if="${course.enrolled}">
+                            <a th:href="@{/student/courses/{id}(id=${course.id})}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300">
+                                Continue
+                            </a>
+                        </div>
+                        <div th:unless="${course.enrolled}">
+                            <a th:href="@{/student/courses/{id}(id=${course.id})}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-300">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-8 flex justify-center" th:if="${totalPages > 1}">
+            <nav class="inline-flex rounded-md shadow">
+                <a th:href="@{/student/courses(page=0, size=${courses.size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                   th:classappend="${currentPage == 0} ? 'pointer-events-none opacity-50' : ''"
+                   class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                    &laquo; First
+                </a>
+                <a th:href="@{/student/courses(page=${currentPage - 1}, size=${courses.size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                   th:classappend="${currentPage == 0} ? 'pointer-events-none opacity-50' : ''"
+                   class="px-3 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                    Previous
+                </a>
+
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}"
+                      th:if="${i-1 >= currentPage-2 and i-1 <= currentPage+2}"
+                      th:classappend="${i-1 == currentPage} ? 'bg-blue-500 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'"
+                      class="px-3 py-2 border border-gray-300">
+                    <a th:href="@{/student/courses(page=${i-1}, size=${courses.size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                       th:text="${i}"
+                       th:classappend="${i-1 == currentPage} ? 'text-white' : 'text-gray-500'"></a>
+                </span>
+
+                <a th:href="@{/student/courses(page=${currentPage + 1}, size=${courses.size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                   th:classappend="${currentPage == totalPages-1} ? 'pointer-events-none opacity-50' : ''"
+                   class="px-3 py-2 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                    Next
+                </a>
+                <a th:href="@{/student/courses(page=${totalPages-1}, size=${courses.size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                   th:classappend="${currentPage == totalPages-1} ? 'pointer-events-none opacity-50' : ''"
+                   class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
+                    Last &raquo;
+                </a>
+            </nav>
+        </div>
+
+        <!-- Page size selector -->
+        <div class="mt-4 flex justify-end items-center">
+            <span class="text-sm text-gray-500 mr-2">Items per page:</span>
+            <select onchange="location = this.value;" class="border rounded px-2 py-1 text-sm">
+                <option th:each="size : ${[6, 12, 24, 48]}"
+                        th:value="@{/student/courses(page=0, size=${size}, keyword=${searchDTO.keyword}, categoryId=${searchDTO.categoryId}, level=${searchDTO.level}, maxPrice=${searchDTO.maxPrice}, sortBy=${searchDTO.sortBy}, sortDirection=${searchDTO.sortDirection})}"
+                        th:text="${size}"
+                        th:selected="${size == courses.size}"></option>
+            </select>
+        </div>
+    </div>
+</main>
+
+<script>
+    // Price range display
+    const priceRange = document.getElementById('maxPrice');
+    const priceDisplay = document.getElementById('priceDisplay').firstChild;
+
+    if (priceRange && priceDisplay) {
+        priceRange.addEventListener('input', () => {
+            priceDisplay.textContent = priceRange.value;
+        });
+    }
+</script>
+</body>
+</html>
