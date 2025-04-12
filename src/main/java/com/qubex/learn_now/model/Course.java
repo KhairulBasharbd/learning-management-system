@@ -23,7 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Table(name = "courses")
-
 public class Course {
 
     @Id
@@ -33,7 +32,7 @@ public class Course {
     @NotBlank(message = "Title is required")
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     @NotBlank(message = "Description is required")
     private String description;
 
