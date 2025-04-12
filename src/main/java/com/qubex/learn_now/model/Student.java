@@ -22,6 +22,8 @@ public class Student extends User {
     private String bio;
     private String preferences;
 
+    private String profilePictureUrl;
+
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
