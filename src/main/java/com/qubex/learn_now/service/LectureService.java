@@ -1,11 +1,13 @@
 package com.qubex.learn_now.service;
 
 import com.qubex.learn_now.dto.request.LectureCreationRequestDTO;
+import com.qubex.learn_now.enums.LectureType;
 import com.qubex.learn_now.exception.custom.NotFoundException;
 import com.qubex.learn_now.model.Lecture;
 import com.qubex.learn_now.model.Section;
 import com.qubex.learn_now.repository.LectureRepository;
 import com.qubex.learn_now.repository.SectionRepository;
+import com.qubex.learn_now.util.VideoUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,13 @@ public class LectureService {
         lecture.setType(lectureDTO.getType());
         lecture.setContent(lectureDTO.getContent());
         lecture.setSection(section);
+
+        if(lectureDTO.getType() == LectureType.VIDEO){
+
+            String embedUrl = VideoUtil.convertToEmbedUrl(lectureDTO.getContent());
+            lecture.setEmbedUrl(embedUrl);
+        }
+
 
         // Get max order and add 1
         int maxOrder = lectureRepository.findBySectionIdOrderByOrderAsc(section.getId())
