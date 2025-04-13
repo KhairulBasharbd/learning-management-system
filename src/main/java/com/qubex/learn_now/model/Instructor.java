@@ -21,6 +21,8 @@ public class Instructor extends User {
     private String expertise;
     private float averageRating;
 
+    private String profilePictureUrl;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
