@@ -146,11 +146,11 @@
                             <div class="flex items-center">
                                 <!-- Icon based on lecture type -->
                                 <div class="mr-3">
-                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).VIDEO}"
+                                    <span th:if="${lecture.type == videoType}"
                                           class="material-icons text-blue-600">play_circle</span>
-                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).PDF}"
+                                    <span th:if="${lecture.type == pdfType}"
                                           class="material-icons text-red-600">picture_as_pdf</span>
-                                    <span th:if="${lecture.type == T(com.qubex.learn_now.enums.LectureType).TEXT}"
+                                    <span th:if="${lecture.type == textType}"
                                           class="material-icons text-green-600">article</span>
                                 </div>
                                 <div>
