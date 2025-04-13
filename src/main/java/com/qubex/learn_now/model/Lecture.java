@@ -38,6 +38,8 @@ public class Lecture {
     @Lob
     private String content; // URL or text content
 
+    private String embedUrl;
+
     @ManyToOne
     @JoinColumn(name = "section_id")
     private Section section;
