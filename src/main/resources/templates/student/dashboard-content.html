@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+</head>
+<body>
+<!-- Main Content Fragment -->
+<main class="flex-1 p-8" layout:fragment="student-content">
+
+    <!-- Error/Success Messages -->
+    <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <div th:if="${validationErrors}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <ul>
+            <li th:each="error : ${validationErrors}" th:text="${error}"></li>
+        </ul>
+    </div>
+    <div th:if="${success}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <p th:text="${success}"></p>
+    </div>
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">My Enrolled Courses</h2>
+        <a th:href="@{/student/courses}" class="text-blue-500 hover:text-blue-700 transition duration-300">
+            <i class="fas fa-search mr-1"></i> Browse Courses
+        </a>
+    </div>
+
+    <!-- When courses exist -->
+    <div th:if="${not #lists.isEmpty(enrolledCourses)}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Dynamic Course Cards -->
+        <div th:each="course : ${enrolledCourses}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+<!--            <img th:if="${course.thumbnailUrl}" th:src="${course.thumbnailUrl}" class="w-full h-40 object-cover rounded mb-4" alt="Course thumbnail">-->
+
+            <img th:src="${course.thumbnailUrl != null ? course.thumbnailUrl : '/img/Course-thumbnail.png'}"
+                 alt="Course thumbnail"
+                 class="w-full h-40 object-cover rounded-t-lg">
+<!--            <div th:unless="${course.thumbnailUrl}" class="w-full h-40 bg-gray-100 rounded mb-4 flex items-center justify-center text-gray-400">-->
+<!--                <i class="fas fa-book-open text-4xl"></i>-->
+<!--            </div>-->
+            <h3 class="text-xl font-semibold text-gray-800" th:text="${course.title}"></h3>
+            <p class="text-gray-600 mt-2" th:text="${course.description}"></p>
+            <div class="mt-4">
+<!--                <p class="text-sm text-gray-500">Progress: <span th:text="${#numbers.formatDecimal(course.progress, 1, 1)}"></span>%</p>-->
+<!--                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">-->
+<!--                    <div class="bg-blue-500 h-2.5 rounded-full" th:style="'width: ' + ${course.progress} + '%'"></div>-->
+<!--                </div>-->
+            </div>
+            <div class="mt-4 flex space-x-2">
+                <a th:href="@{/student/courses/{id}(id=${course.id})}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-eye mr-2"></i> View Course
+                </a>
+                <a th:href="@{/student/courses/{id}/study(id=${course.id})}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">
+                    <i class="fas fa-book mr-2"></i> Study Now
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Empty State - When no courses enrolled -->
+    <div th:if="${#lists.isEmpty(enrolledCourses)}" class="bg-white rounded-lg shadow-sm p-8 text-center">
+        <div class="max-w-md mx-auto">
+            <div class="text-blue-500 mb-4">
+                <i class="fas fa-book-open fa-4x opacity-50"></i>
+            </div>
+            <h3 class="text-2xl font-medium text-gray-800 mb-2">No Courses Enrolled Yet</h3>
+            <p class="text-gray-600 mb-6">You haven't enrolled in any courses yet. Browse our catalog to start learning!</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a th:href="@{/courses}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg transition duration-300">
+                    <i class="fas fa-search mr-2"></i> Browse Courses
+                </a>
+                <a th:href="@{/courses/popular}" class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-6 py-3 rounded-lg transition duration-300">
+                    <i class="fas fa-chart-line mr-2"></i> Popular Courses
+                </a>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-100">
+                <p class="text-sm text-gray-500 mb-2">Need help choosing a course?</p>
+                <a th:href="@{/support}" class="text-blue-500 hover:text-blue-700 text-sm font-medium transition duration-300">
+                    <i class="fas fa-question-circle mr-1"></i> Contact our advisors
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>
