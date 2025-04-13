@@ -30,6 +30,9 @@ public class CourseProgress {
     @JoinColumn(name = "course_id")
     private Course course;
 
+    //Since CourseProgress has @ManyToOne relationships with Student and Course, it typically means:
+    // A student can have only one progress entry per course
+
     @ManyToOne
     @JoinColumn(name = "current_lesson_id")
     private Lecture currentLesson;
