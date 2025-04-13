@@ -1,0 +1,240 @@
+<!--From Claude AI-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/student-layout}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.title} + ' - Learning Dashboard'">Course Learning Dashboard</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+<body>
+<main class="flex-1 flex md:flex-row flex-col" layout:fragment="student-content">
+    <!-- Left Sidebar - Course Navigation -->
+    <div class="w-full md:w-1/4 bg-white shadow-md flex flex-col h-auto md:h-screen md:overflow-y-auto">
+        <!-- Course Info Header -->
+        <div class="p-4 border-b border-gray-200">
+            <h1 class="text-xl font-bold text-gray-800" th:text="${course.title}">Course Title</h1>
+            <div class="flex items-center mt-2 text-sm text-gray-600">
+                <i class="fas fa-user-tie mr-1"></i>
+                <span th:text="${course.instructor.fullName}">Instructor Name</span>
+            </div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="p-4 bg-blue-50 border-b border-gray-200">
+            <div class="mb-2 flex justify-between items-center">
+                <span class="text-sm font-medium text-gray-700">Your Progress</span>
+                <span class="text-sm font-medium text-blue-600" th:text="${courseProgress.completedLessons} + '/' + ${courseProgress.totalLessons}">12/24</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                <div class="bg-blue-600 h-2.5 rounded-full" th:style="'width: ' + ${courseProgress.progressPercentage} + '%'"></div>
+            </div>
+            <p class="text-sm text-gray-600 mt-2" th:text="${#numbers.formatDecimal(courseProgress.progressPercentage, 0, 0)} + '% complete'">50% complete</p>
+        </div>
+
+        <!-- Course Navigation -->
+        <div class="flex-1 overflow-y-auto">
+            <nav aria-label="Course sections">
+                <div class="space-y-1">
+                    <div th:each="section, sectionStat : ${sections}" class="border-b border-gray-200">
+                        <!-- Section Header -->
+                        <button
+                                th:id="'section-header-' + ${section.id}"
+                                class="w-full px-4 py-3 flex justify-between items-center hover:bg-gray-50 focus:outline-none"
+                                th:onclick="'toggleSection(''' + ${section.id} + ''')'">
+                            <div class="flex items-center text-left">
+                                <span class="text-gray-600 mr-2" th:text="${section.order}">1</span>
+                                <h3 class="font-medium text-gray-800 text-sm" th:text="${section.title}">Section Title</h3>
+                            </div>
+                            <i class="fas fa-chevron-down text-gray-500 transition-transform duration-300"></i>
+                        </button>
+
+                        <!-- Lectures List -->
+                        <div th:id="'section-content-' + ${section.id}" >
+                            <div th:each="lecture : ${section.lectures}" class="pl-6 pr-4 py-2 hover:bg-gray-50 border-t border-gray-100">
+                                <a th:href="@{/student/courses/{courseId}/learn(courseId=${course.id}, lectureId=${lecture.id})}"
+                                   class="flex items-center group"
+                                   th:classappend="${currentLecture != null && currentLecture.id == lecture.id ? 'bg-blue-50' : ''}">
+                                    <!-- Lecture Icon -->
+                                    <div class="mr-3">
+                                        <span th:if="${lecture.type.name() == 'VIDEO'}" class="material-icons text-blue-600">play_circle</span>
+                                        <span th:if="${lecture.type.name() == 'PDF'}" class="material-icons text-red-600">picture_as_pdf</span>
+                                        <span th:if="${lecture.type.name() == 'TEXT'}" class="material-icons text-green-600">article</span>
+                                    </div>
+
+                                    <!-- Lecture Title -->
+                                    <div class="flex-1">
+                                        <h4 class="text-sm text-gray-800 group-hover:text-blue-600"
+                                            th:classappend="${currentLecture != null && currentLecture.id == lecture.id ? 'font-medium text-blue-600' : ''}"
+                                            th:text="${lecture.title}">Lecture Title</h4>
+                                    </div>
+
+                                    <!-- Completion Status -->
+                                    <div>
+                                        <span th:if="${completedLectures.contains(lecture.id)}"
+                                              class="material-icons text-green-500" title="Completed">check_circle</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="w-full md:w-3/4 flex flex-col h-screen overflow-hidden">
+        <!-- Navigation Bar -->
+        <div class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+            <!-- Lecture Navigation -->
+            <div class="flex items-center space-x-3">
+                <a th:if="${previousLecture != null}"
+                   th:href="@{/student/courses/{courseId}/learn(courseId=${course.id}, lectureId=${previousLecture.id})}"
+                   class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-chevron-left"></i>
+                    <span class="hidden md:inline ml-1">Previous</span>
+                </a>
+                <a th:if="${nextLecture != null}"
+                   th:href="@{/student/courses/{courseId}/learn(courseId=${course.id}, lectureId=${nextLecture.id})}"
+                   class="text-gray-600 hover:text-blue-600">
+                    <span class="hidden md:inline mr-1">Next</span>
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+
+            <!-- Lecture Completion Button -->
+            <div th:if="${currentLecture != null}">
+                <form th:if="${completedLectures.contains(currentLecture.id)}"
+                      th:action="@{/student/courses/{courseId}/lectures/{lectureId}/mark-incomplete(courseId=${course.id}, lectureId=${currentLecture.id})}"
+                      method="post">
+                    <button type="submit" class="flex items-center px-4 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-sm text-gray-700">
+                        <span class="material-icons text-green-500 mr-1">check_circle</span>
+                        Completed
+                    </button>
+                </form>
+                <form th:unless="${completedLectures.contains(currentLecture.id)}"
+                      th:action="@{/student/courses/{courseId}/lectures/{lectureId}/mark-complete(courseId=${course.id}, lectureId=${currentLecture.id})}"
+                      method="post">
+                    <button type="submit" class="flex items-center px-4 py-1 bg-blue-600 hover:bg-blue-700 rounded-md text-sm text-white">
+                        <span class="material-icons text-white mr-1">check_circle_outline</span>
+                        Mark as Complete
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Content Display Area -->
+        <div class="flex-1 overflow-y-auto bg-gray-50 p-6">
+            <div th:if="${currentLecture == null}" class="text-center py-12">
+                <div class="bg-white rounded-lg shadow-md p-8 max-w-lg mx-auto">
+                    <div class="text-blue-600 text-5xl mb-4">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to the Course!</h2>
+                    <p class="text-gray-600 mb-6">Select a lecture from the sidebar to start learning.</p>
+                    <p class="text-sm text-gray-500">Track your progress and mark lessons as complete as you go.</p>
+                </div>
+            </div>
+
+            <!-- Lecture Content -->
+            <div th:if="${currentLecture != null}" class="bg-white rounded-lg shadow-md">
+                <!-- Lecture Header -->
+                <div class="border-b border-gray-200 p-6">
+                    <h1 class="text-2xl font-bold text-gray-800" th:text="${currentLecture.title}">Lecture Title</h1>
+                    <p class="text-gray-600 mt-2" th:if="${currentLecture.description != null}" th:text="${currentLecture.description}">
+                        Lecture description goes here...
+                    </p>
+                </div>
+
+                <!-- Video Content -->
+                <div th:if="${currentLecture.type.name() == 'VIDEO'}" class="p-6">
+                    <div class="relative w-full mb-4" style="padding-top: 56.25%; /* 16:9 ratio */">
+                        <iframe th:src="${currentLecture.embedUrl}"
+                                class="absolute top-0 left-0 w-full h-full rounded-xl shadow-lg"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- PDF Content -->
+                <div th:if="${currentLecture.type.name() == 'PDF'}" class="p-6">
+                    <div class="bg-gray-100 rounded-lg p-4 flex items-center justify-between mb-4">
+                        <div class="text-gray-700">
+                            <i class="fas fa-file-pdf text-red-600 mr-2"></i>
+                            <span th:text="${currentLecture.title}">PDF Document Title</span>
+                        </div>
+                        <a th:href="${currentLecture.content}" download class="text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-download mr-1"></i> Download
+                        </a>
+                    </div>
+<!--                    <div class="h-96 overflow-y-auto border border-gray-200 rounded-lg">-->
+<!--                        <iframe th:src="${currentLecture.content}" class="w-full h-full"></iframe>-->
+<!--                    </div>-->
+
+                    <div class="h-96 overflow-y-auto border border-gray-200 rounded-lg">
+                        <iframe th:src="'https://docs.google.com/gview?url=' + ${currentLecture.content} + '&embedded=true'"
+                                class="w-full h-full" ></iframe>
+                    </div>
+
+                </div>
+
+                <!-- Text Content -->
+                <div th:if="${currentLecture.type.name() == 'TEXT'}" class="p-6">
+                    <div class="prose max-w-none text-gray-800" th:utext="${currentLecture.content}">
+                        Text content goes here...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last accessed date -->
+            <div th:if="${courseProgress != null && courseProgress.lastAccessedDate != null}" class="text-right mt-4 text-sm text-gray-500">
+                Last accessed: <span th:text="${#temporals.format(courseProgress.lastAccessedDate, 'MMM dd, yyyy HH:mm')}">April 10, 2025 15:30</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Open current section by default
+        const currentLectureElement = document.querySelector('.bg-blue-50');
+        if (currentLectureElement) {
+            const sectionDiv = findParentSection(currentLectureElement);
+            if (sectionDiv) {
+                const sectionId = sectionDiv.id.replace('section-content-', '');
+                toggleSection(sectionId);
+            }
+        }
+    });
+
+    function findParentSection(element) {
+        let current = element;
+        while (current && !current.id.startsWith('section-content-')) {
+            current = current.parentElement;
+        }
+        return current;
+    }
+
+    function toggleSection(sectionId) {
+        console.log('Toggling section:', sectionId);
+        const content = document.getElementById('section-content-' + sectionId);
+        const header = document.getElementById('section-header-' + sectionId);
+        const icon = header.querySelector('i');
+
+        content.classList.toggle('hidden');
+        icon.classList.toggle('transform');
+        icon.classList.toggle('rotate-180');
+    }
+</script>
+</body>
+</html>
