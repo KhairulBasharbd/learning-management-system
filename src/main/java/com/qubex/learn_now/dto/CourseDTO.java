@@ -13,18 +13,17 @@ public class CourseDTO {
     private UUID id;
     private String title;
     private String description;
-    private UUID categoryId;
-    private String categoryName;
+    //private UUID categoryId;
+    //private String categoryName;
     private CourseLevel level;
     private BigDecimal price;
     private String thumbnailUrl;
-    private String syllabusUrl;
-    private CourseVisibility visibility;
-    private String instructorName;
-    private UUID instructorId;
-    private String tags;
+    //private String syllabusUrl;
+    //private CourseVisibility visibility;
+    //private String instructorName;
+    //private UUID instructorId;
+    //private String tags;
     private String duration;
     private int lessonCount;
-    private List<SectionDTO> sections;
 
 }
