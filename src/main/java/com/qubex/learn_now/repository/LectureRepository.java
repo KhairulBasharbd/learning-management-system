@@ -16,7 +16,6 @@ public interface LectureRepository extends JpaRepository<Lecture, UUID> {
 
 
 
-
 //    @Query("SELECT l FROM Lecture l WHERE l.section.course.id = :courseId ORDER BY l.section.orderIndex, l.orderIndex ASC")
 //    List<Lecture> findAllByCourseIdOrderByOrder(@Param("courseId") UUID courseId);
 //
