@@ -13,9 +13,16 @@ import java.util.UUID;
 @Repository
 public interface LectureCompletionRepository extends JpaRepository<LectureCompletion, UUID> {
 
-    List<LectureCompletion> findByStudent(Student student);
+    List<LectureCompletion> findByStudentId(UUID studentId);
 
     Optional<LectureCompletion> findByStudentAndLesson(Student student, Lecture lesson);
 
     List<LectureCompletion> findByStudentAndLessonSectionCourseId(Student student, UUID courseId);
+
+    boolean existsByStudentIdAndLessonId(UUID studentId, UUID lessonId);
+
+    void deleteByStudentIdAndLessonId(UUID studentId, UUID lessonId);
+
+    List<LectureCompletion> findByStudentIdAndLessonIn(UUID studentId, List<Lecture> lessons);
+
 }
