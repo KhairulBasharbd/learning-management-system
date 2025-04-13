@@ -4,6 +4,7 @@ package com.qubex.learn_now.controller;
 import com.qubex.learn_now.dto.request.CourseCreationRequestDTO;
 import com.qubex.learn_now.dto.request.LectureCreationRequestDTO;
 import com.qubex.learn_now.dto.request.SectionCreationRequestDTO;
+import com.qubex.learn_now.enums.LectureType;
 import com.qubex.learn_now.model.Course;
 import com.qubex.learn_now.model.Section;
 import com.qubex.learn_now.repository.CourseCategoryRepository;
@@ -114,6 +115,9 @@ public class InstructorController {
             Hibernate.initialize(section.getLectures());
         }
 
+        model.addAttribute("videoType", LectureType.VIDEO);
+        model.addAttribute("pdfType", LectureType.PDF);
+        model.addAttribute("textType", LectureType.TEXT);
         model.addAttribute("course", course);
         model.addAttribute("sections", sections);
         model.addAttribute("newSection", new SectionCreationRequestDTO());
