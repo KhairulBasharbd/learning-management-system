@@ -17,10 +17,12 @@ public interface CourseProgressRepository extends JpaRepository<CourseProgress, 
 
     List<CourseProgress> findByStudentEmailOrderByLastAccessedDateDesc(String studentEmail);
 
-    Optional<CourseProgress> findByStudentAndCourse(Student student, Course course);
+    Optional<CourseProgress> findByStudentIdAndCourseId(UUID studentId, UUID courseId);
 
     Optional<CourseProgress> findByStudentEmailAndCourseId(String studentEmail, UUID courseId);
 
     boolean existsByStudentEmailAndCourseId(String email, UUID courseId);
+
+    boolean existsByStudentIdAndCourseId(UUID studentId, UUID courseId);
 
 }
