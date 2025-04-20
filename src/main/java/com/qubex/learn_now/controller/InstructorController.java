@@ -42,7 +42,10 @@ public class InstructorController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        return "instructor/dashboard-content";
+        List<Course> courses = courseService.getCoursesByInstructor();
+
+        model.addAttribute("courses", courses);
+        return "instructor/instructor-all-courses";
     }
 
 
